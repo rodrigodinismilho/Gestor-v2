@@ -175,6 +175,11 @@
                 <button class="btn btn-outline" onclick="handleRegister()" style="margin-top: 12px;">
                     Criar Conta
                 </button>
+                <div style="text-align: center; margin-top: 16px;">
+                    <button onclick="recoverPasswords()" style="background:none; border:none; color:var(--text-secondary); font-size:12px; cursor:pointer; text-decoration:underline;">
+                        Esqueci-me da Password
+                    </button>
+                </div>
                 <p id="login-error" style="color: #ef4444; font-size: 14px; margin-top: 16px; text-align: center; display: none;"></p>
             </div>
         </div>
@@ -633,6 +638,25 @@
             err.style.display = 'none';
             localStorage.setItem('financas_app_session', user);
             loadUserData(user);
+        }
+
+        function recoverPasswords() {
+            const savedUsers = localStorage.getItem('financas_app_usersDB');
+            if(!savedUsers) {
+                alert('Ainda não existem contas criadas neste computador.');
+                return;
+            }
+            const db = JSON.parse(savedUsers);
+            const userNames = Object.keys(db);
+            if(userNames.length === 0) {
+                alert('A base de dados de utilizadores está vazia.');
+                return;
+            }
+            let msg = '=== CONTAS RECUPERADAS ===\n\n';
+            userNames.forEach(u => {
+                msg += `Nome: ${u}\nSenha: ${db[u].password}\n\n`;
+            });
+            alert(msg);
         }
 
         function logout() {
